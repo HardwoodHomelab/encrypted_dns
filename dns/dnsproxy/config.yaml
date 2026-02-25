@@ -1,0 +1,32 @@
+# This is the yaml configuration file for dnsproxy with minimal working
+# configuration, all the options available can be seen with ./dnsproxy --help.
+# To use it within dnsproxy specify the --config-path=/<path-to-config.yaml>
+# option.  Any other command-line options specified will override the values
+# from the config file.
+---
+listen-addrs:
+  - "0.0.0.0"
+listen-ports:
+  - 53
+max-go-routines: 0
+ratelimit: 0
+ratelimit-subnet-len-ipv4: 24
+ratelimit-subnet-len-ipv6: 64
+udp-buf-size: 0
+upstream:
+  - "pihole:53"
+timeout: '10s'
+
+edns: true
+### Enable DNS-over-TLS
+
+tls-crt: '/cert/dns.hwhl-demo.xyz.crt'
+tls-key: '/cert/dns.hwhl-demo.xyz.key'
+tls-min-version: 1.2
+tls-port: 
+  - 853
+
+### Enable DNS-over-HTTPS
+
+https-port:
+  - 443

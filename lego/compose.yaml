@@ -1,0 +1,10 @@
+services:
+  lego:
+    volumes:
+      - /home/hwhl/cert:/.lego/certificates
+      - ./accounts:/.lego/accounts
+    environment:
+      - CLOUDFLARE_EMAIL=<yourcloudflare@email.com>
+      - CLOUDFLARE_DNS_API_TOKEN=<yourAPItoken>
+    image: goacme/lego
+    command: -a --email <youremail@domain.com> --dns cloudflare -d '<yourdomain>' -d <domainzone> run

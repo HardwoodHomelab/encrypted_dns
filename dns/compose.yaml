@@ -1,0 +1,38 @@
+services:
+  dnsproxy:
+    image: adguard/dnsproxy
+    container_name: dnsproxy
+    restart: unless-stopped
+    ports:
+      - 443:443
+      - 853:853/udp
+      - 853:853/tcp
+    volumes:
+      - ./dnsproxy/config.yaml:/opt/dnsproxy/config.yaml
+      - /home/hwhl/cert:/cert
+
+  Pi-hole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    restart: unless-stopped
+    ports:
+      - "80:80/tcp"
+      - "53:53/tcp"
+      - "53:53/udp"
+    environment:
+      TZ: 'America/Edmonton'
+      # Set a password to access the web interface. Not setting on will result in a random password being assigned
+      FTLCONF_webserver_api_password: 'Super-Secure'
+      FTLCONF_dns_listeningMode: 'all'
+      FLTCONF_dns_upstreams: 'unbound'
+        # Volumes store your data between container upgrades
+    volumes:
+            # For persisting Pi-holes's databases and common configuration file
+      - './pihole/etc-pihole:/etc/pihole'
+      #- './pihole/etc-dnsmasq.d:/etc/dnsmasq.d'
+  unbound:
+    image: mvance/unbound:latest
+    container_name: unbound
+    restart: unless-stopped
+    volumes:
+      - './unbound:/opt/unbound/etc/unbound'
